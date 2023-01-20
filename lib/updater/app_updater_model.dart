@@ -44,6 +44,7 @@ class AppUpdater {
     if (onUpdateAvailable != null) {
       if (!await onUpdateAvailable()) return;
     }
+    appFile.serverappDir = dirName;
     final ds = await _downloadFileByUrl(appFile: appFile);
     if (ds.downStatus) {
       await ds.filePath.openFile;
@@ -72,7 +73,7 @@ Future<AppFile> _downloadFileByUrl({
         validateStatus: (status) => true,
       ),
       onReceiveProgress: (count, total) {
-        if (total > 10) {
+        if (total > 1000) {
           ctrl.showdownload.value = true;
           ctrl.filesize = total;
           ctrl.dowloadpercent.value = count / total;
