@@ -59,7 +59,7 @@ class _UpdateApp extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              "New version of ${ctrl.appFile.appTitle} is available. Please install ${ctrl.appFile.appname} new version ${ctrl.appFile.latestversion} for latest feature."
+              "New version of ${ctrl.appFile.appTitle} is available. Please install ${ctrl.appFile.appTitle} new version ${ctrl.appFile.latestversion} for latest feature."
                   .textbodyregular(
                 size: 14,
                 maxlines: 5,

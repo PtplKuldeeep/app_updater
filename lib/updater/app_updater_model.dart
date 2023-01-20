@@ -64,7 +64,7 @@ Future<AppFile> _downloadFileByUrl({
     ctrl.isdownloading = true;
 
     var response = await dio.get(
-      "",
+      appFile.appPathURL,
       options: Options(
         responseType: ResponseType.bytes,
         followRedirects: false,
@@ -84,7 +84,7 @@ Future<AppFile> _downloadFileByUrl({
     await rufffile.close();
     appFile.downStatus = true;
     appFile.filePath = appFile.filePath;
-  } catch (e) {
+  } on DioError catch (e) {
     appFile.downStatus = false;
     debugPrint("downloadFileByUrl : $e");
   }
@@ -114,7 +114,7 @@ Future<AppFile> _checkUpdate(
       appFile.appTitle = response.data["apptitle"] ?? "";
       appFile.canupdate = localversion.updateAvailable(appFile.latestversion);
     }
-  } catch (e) {
+  } on DioError {
     appFile.canupdate = false;
   }
 
