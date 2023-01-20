@@ -60,9 +60,9 @@ Future<AppFile> _downloadFileByUrl({
   showAppDownloadDialogue(ctrl: ctrl);
 
   try {
-    final file = File(appFile.filePath);
+    final file = File(appFile.appDirPath);
     ctrl.isdownloading = true;
-
+    print("appFile.appPathURL : ${appFile.appPathURL}");
     var response = await dio.get(
       appFile.appPathURL,
       options: Options(
