@@ -7,7 +7,7 @@ import 'package:app_updater/functions/update_fun.dart';
 import 'package:app_updater/functions/version_check.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/rendering.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:path_provider/path_provider.dart';
 
 class AppUpdater {
@@ -20,12 +20,15 @@ class AppUpdater {
   });
 
   AppFile appFile = AppFile();
+  bool _checkedStatus = false;
 
   Future<bool> checkAppUpdate() async {
     appFile.serverappDir = dirName;
+    if (appFile.localappDir.isEmpty) {
+      appFile.localappDir = (await getApplicationDocumentsDirectory()).path;
+    }
     appFile = await _checkUpdate(dirName: dirName, localversion: appversion);
 
-    appFile.localappDir = (await getApplicationDocumentsDirectory()).path;
     if (!appFile.canupdate) {
       final prefile = File(appFile.appDirPath);
 
@@ -34,12 +37,18 @@ class AppUpdater {
       }
     }
 
+    if (appFile.latestversion.isNotEmpty) {
+      _checkedStatus = true;
+    }
     return appFile.canupdate;
   }
 
   downloadLatestApp({
     Future<bool> Function()? onUpdateAvailable,
   }) async {
+    if (!_checkedStatus) {
+      await checkAppUpdate();
+    }
     if (!appFile.canupdate) return;
     if (onUpdateAvailable != null) {
       if (!await onUpdateAvailable()) return;
@@ -100,15 +109,23 @@ Future<AppFile> _checkUpdate(
   AppFile appFile = AppFile();
   try {
     Dio dio = Dio();
-    final response = await dio.get(
-      [hostPath, dirName, "LatestApp.json"].join("/"),
-      options: Options(
-        responseType: ResponseType.json,
-        followRedirects: false,
-        receiveTimeout: 3000,
-        validateStatus: (status) => true,
-      ),
-    );
+    final response = await dio
+        .get(
+          [hostPath, dirName, "LatestApp.json"].join("/"),
+          options: Options(
+            responseType: ResponseType.json,
+            followRedirects: false,
+            receiveTimeout: 3000,
+            validateStatus: (status) => true,
+          ),
+        )
+        .timeout(
+          const Duration(seconds: 3),
+          onTimeout: () => Response(
+              requestOptions: RequestOptions(
+            path: "",
+          )),
+        );
     if (response.statusCode == 200) {
       appFile.latestversion = response.data["latestversion"] ?? "";
       appFile.appname = response.data["appname"] ?? "";
