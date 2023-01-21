@@ -57,7 +57,7 @@ class AppUpdater {
     final ds = await _downloadFileByUrl(appFile: appFile);
     print("ds.downStatus : ${ds.downStatus}");
     if (ds.downStatus) {
-      final ofs = await ds.filePath.openFile;
+      final ofs = await ds.appDirPath.openFile;
       print("ofs : ${ofs.message}, ${ofs.type}");
     }
   }
