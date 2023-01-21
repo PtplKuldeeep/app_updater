@@ -1,6 +1,6 @@
 import 'package:app_updater/constants/app_consts.dart';
 import 'package:flutter/material.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:open_file/open_file.dart';
 
 extension KdAppUpdaterSTRExt on String {
   /// converting string to Text widget in Regular font family
@@ -49,7 +49,7 @@ extension KdAppUpdaterSTRExt on String {
   Future<OpenResult> get openFile async {
     print("OpenFile : ${this}");
     try {
-      return await OpenFilex.open(this);
+      return await OpenFile.open(this);
     } catch (e) {
       return OpenResult(
         type: ResultType.error,
