@@ -70,6 +70,10 @@ Future<AppFile> _downloadFileByUrl({
   showAppDownloadDialogue(ctrl: ctrl);
 
   try {
+    if (appFile.localappDir.isEmpty) {
+      appFile.localappDir = (await getApplicationDocumentsDirectory()).path;
+    }
+    print("appFile.appDirPath : ${appFile.appDirPath}");
     final file = File(appFile.appDirPath);
 
     print("appFile.appPathURL : ${appFile.appPathURL}");
@@ -86,6 +90,7 @@ Future<AppFile> _downloadFileByUrl({
           ctrl.showdownload.value = true;
           ctrl.filesize = total;
           ctrl.dowloadpercent.value = count / total;
+          print("$count => $total");
         }
       },
     );
@@ -93,7 +98,6 @@ Future<AppFile> _downloadFileByUrl({
     rufffile.writeFromSync(response.data);
     await rufffile.close();
     appFile.downStatus = true;
-    appFile.filePath = appFile.filePath;
   } on DioError catch (e) {
     appFile.downStatus = false;
     debugPrint("downloadFileByUrl : $e");

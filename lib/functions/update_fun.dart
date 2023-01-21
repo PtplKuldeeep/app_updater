@@ -43,7 +43,7 @@ class _UpdateApp extends StatelessWidget {
         child: Container(
           margin:
               EdgeInsets.symmetric(vertical: Get.height * 0.3, horizontal: 10),
-          height: 160,
+          height: 120,
           width: Get.width * 0.9,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           decoration: BoxDecoration(
