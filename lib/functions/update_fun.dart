@@ -40,74 +40,78 @@ class _UpdateApp extends StatelessWidget {
       },
       child: Material(
         color: Colors.transparent,
-        child: Container(
-          margin:
-              EdgeInsets.symmetric(vertical: Get.height * 0.3, horizontal: 10),
-          height: 120,
-          width: Get.width * 0.9,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          decoration: BoxDecoration(
-            color: kdwhite,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              "App Update".textbodySemiBold(
-                size: 18,
-                color: Get.theme.primaryColor,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              "New version of ${ctrl.appFile.appTitle} is available. Please install ${ctrl.appFile.appTitle} new version ${ctrl.appFile.latestversion} for latest feature."
-                  .textbodyregular(
-                size: 14,
-                maxlines: 5,
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Obx(
-                () => Column(
-                  children: [
-                    Row(
-                      children: [
-                        (ctrl.filesize * ctrl.dowloadpercent.value)
-                            .shortSize
-                            .textbodyregular(
-                              color: Get.theme.primaryColor,
-                            ),
-                        const Spacer(),
-                        (ctrl.filesize).shortSize.textbodyregular(
-                              color: Get.theme.primaryColor,
-                            ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    LinearProgressIndicator(
-                      backgroundColor: Get.theme.primaryColor.withOpacity(0.3),
-                      value: (ctrl.dowloadpercent.value == 0 ||
-                              ctrl.dowloadpercent.value == 1)
-                          ? null
-                          : ctrl.dowloadpercent.value,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    "Downloading...".textbodyregular(
-                      color: Get.theme.primaryColor,
-                      size: 10,
-                    ),
-                  ],
+        child: Center(
+          child: Container(
+            // margin:
+            //     EdgeInsets.symmetric(vertical: Get.height * 0.3, horizontal: 10),
+            // height: 120,
+            width: Get.width * 0.9,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            decoration: BoxDecoration(
+              color: kdwhite,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                "App Update".textbodySemiBold(
+                  size: 18,
+                  color: Get.theme.primaryColor,
                 ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-            ],
+                const SizedBox(
+                  height: 10,
+                ),
+                "New version of ${ctrl.appFile.appTitle} is available. Please install ${ctrl.appFile.appTitle} new version ${ctrl.appFile.latestversion} for latest feature."
+                    .textbodyregular(
+                  size: 14,
+                  maxlines: 5,
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Obx(
+                  () => Column(
+                    children: [
+                      Row(
+                        children: [
+                          (ctrl.filesize * ctrl.dowloadpercent.value)
+                              .shortSize
+                              .textbodyregular(
+                                color: Get.theme.primaryColor,
+                              ),
+                          const Spacer(),
+                          (ctrl.filesize).shortSize.textbodyregular(
+                                color: Get.theme.primaryColor,
+                              ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      LinearProgressIndicator(
+                        color: Get.theme.primaryColor,
+                        backgroundColor:
+                            Get.theme.primaryColor.withOpacity(0.3),
+                        value: (ctrl.dowloadpercent.value == 0 ||
+                                ctrl.dowloadpercent.value == 1)
+                            ? null
+                            : ctrl.dowloadpercent.value,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      "Downloading...".textbodyregular(
+                        color: Get.theme.primaryColor,
+                        size: 10,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+              ],
+            ),
           ),
         ),
       ),

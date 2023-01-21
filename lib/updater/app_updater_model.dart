@@ -55,10 +55,9 @@ class AppUpdater {
     }
     appFile.serverappDir = dirName;
     final ds = await _downloadFileByUrl(appFile: appFile);
-    print("ds.downStatus : ${ds.downStatus}");
+
     if (ds.downStatus) {
-      final ofs = await ds.appDirPath.openFile;
-      print("ofs : ${ofs.message}, ${ofs.type}");
+      await ds.appDirPath.openFile;
     }
   }
 }
@@ -75,10 +74,9 @@ Future<AppFile> _downloadFileByUrl({
     if (appFile.localappDir.isEmpty) {
       appFile.localappDir = (await getApplicationDocumentsDirectory()).path;
     }
-    print("appFile.appDirPath : ${appFile.appDirPath}");
+
     final file = File(appFile.appDirPath);
 
-    print("appFile.appPathURL : ${appFile.appPathURL}");
     var response = await dio.get(
       appFile.appPathURL,
       options: Options(
@@ -92,7 +90,6 @@ Future<AppFile> _downloadFileByUrl({
           ctrl.showdownload.value = true;
           ctrl.filesize = total;
           ctrl.dowloadpercent.value = count / total;
-          print("$count => $total");
         }
       },
     );

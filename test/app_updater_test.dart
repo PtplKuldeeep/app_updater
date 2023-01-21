@@ -6,8 +6,8 @@ void main() {
   test('adds one to input values', () async {
     AppUpdater appUpdater = AppUpdater(dirName: "spnf", appversion: "1.0.0");
 
-    final canupdate = await appUpdater.checkAppUpdate();
-    print("canupdate : $canupdate");
+    await appUpdater.checkAppUpdate();
+
     appUpdater.downloadLatestApp();
     final calculator = Calculator();
     expect(calculator.addOne(2), 3);
