@@ -8,6 +8,7 @@ showAppDownloadDialogue({required AppUpdaterCtrl ctrl}) {
   if (_isdownloading) return;
   ctrl.showdownload.value = false;
   ctrl.dowloadpercent.value = 0;
+  _isdownloading = true;
   Get.dialog(
     _UpdateApp(
       ctrl: ctrl,
@@ -121,6 +122,4 @@ class AppUpdaterCtrl extends GetxController {
   var showdownload = false.obs;
   int filesize = 0;
   AppFile appFile = AppFile();
-
-  set isdownloading(bool val) => _isdownloading = val;
 }

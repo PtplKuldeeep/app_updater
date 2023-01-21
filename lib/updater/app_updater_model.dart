@@ -71,7 +71,7 @@ Future<AppFile> _downloadFileByUrl({
 
   try {
     final file = File(appFile.appDirPath);
-    ctrl.isdownloading = true;
+
     print("appFile.appPathURL : ${appFile.appPathURL}");
     var response = await dio.get(
       appFile.appPathURL,
@@ -98,7 +98,7 @@ Future<AppFile> _downloadFileByUrl({
     appFile.downStatus = false;
     debugPrint("downloadFileByUrl : $e");
   }
-  ctrl.isdownloading = false;
+
   ctrl.showdownload.value = true;
   hideAppDownloadDialogue();
   return appFile;
