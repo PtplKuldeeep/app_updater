@@ -47,6 +47,7 @@ extension KdAppUpdaterSTRExt on String {
   }
 
   Future<OpenResult> get openFile async {
+    print("OpenFile : ${this}");
     try {
       return await OpenFilex.open(this);
     } catch (e) {
