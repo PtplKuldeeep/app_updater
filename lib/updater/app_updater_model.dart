@@ -25,7 +25,7 @@ class AppUpdater {
   Future<bool> checkAppUpdate() async {
     appFile.serverappDir = dirName;
     if (appFile.localappDir.isEmpty) {
-      appFile.localappDir = (await getApplicationDocumentsDirectory()).path;
+      appFile.localappDir = (await getApplicationSupportDirectory()).path;
     }
     appFile = await _checkUpdate(dirName: dirName, localversion: appversion);
 
