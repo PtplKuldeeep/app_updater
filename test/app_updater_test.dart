@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('adds one to input values', () async {
-    AppUpdater appUpdater = AppUpdater(dirName: "spnf", appversion: "1.0.0");
+    AppUpdater appUpdater =
+        AppUpdater(dirName: "spnf", appversion: "1.0.0", isLiveApk: false);
 
     await appUpdater.checkAppUpdate();
 

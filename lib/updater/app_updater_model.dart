@@ -13,10 +13,12 @@ import 'package:path_provider/path_provider.dart';
 class AppUpdater {
   final String appversion;
   final String dirName;
+  final bool isLiveApk;
 
   AppUpdater({
     required this.dirName,
     required this.appversion,
+    required this.isLiveApk,
   });
 
   AppFile appFile = AppFile();
@@ -27,7 +29,10 @@ class AppUpdater {
     if (appFile.localappDir.isEmpty) {
       appFile.localappDir = (await getApplicationSupportDirectory()).path;
     }
-    appFile = await _checkUpdate(dirName: dirName, localversion: appversion);
+    if (!appFile.canupdate) {
+      appFile = await _checkUpdate(
+          dirName: dirName, localversion: appversion, isLiveApk: isLiveApk);
+    }
 
     if (!appFile.canupdate) {
       final prefile = File(appFile.appDirPath);
@@ -99,6 +104,8 @@ Future<AppFile> _downloadFileByUrl({
     appFile.downStatus = true;
   } on DioError catch (e) {
     appFile.downStatus = false;
+    appFile.errorMsj = e.toString();
+
     debugPrint("downloadFileByUrl : $e");
   }
 
@@ -108,7 +115,9 @@ Future<AppFile> _downloadFileByUrl({
 }
 
 Future<AppFile> _checkUpdate(
-    {required String dirName, required String localversion}) async {
+    {required String dirName,
+    required String localversion,
+    required bool isLiveApk}) async {
   AppFile appFile = AppFile();
   try {
     Dio dio = Dio();
@@ -130,9 +139,14 @@ Future<AppFile> _checkUpdate(
           )),
         );
     if (response.statusCode == 200) {
-      appFile.latestversion = response.data["latestversion"] ?? "";
-      appFile.appname = response.data["appname"] ?? "";
-      appFile.appTitle = response.data["apptitle"] ?? "";
+      appFile.latestversion =
+          response.data[isLiveApk ? "live_latestversion" : "latestversion"] ??
+              "0.0.0";
+      appFile.appname =
+          response.data[isLiveApk ? "live_appname" : "appname"] ?? "";
+      appFile.appTitle = isLiveApk
+          ? (response.data["live_apptitle"] ?? response.data["apptitle"])
+          : response.data["apptitle"] ?? "";
       appFile.canupdate = localversion.updateAvailable(appFile.latestversion);
     }
   } on DioError {
@@ -165,6 +179,7 @@ class AppFile {
     this.downStatus = false,
     this.canupdate = false,
     this.filePath = '',
+    this.errorMsj = '',
     this.latestversion = '',
     this.appname = '',
     this.appTitle = '',
@@ -179,6 +194,8 @@ class AppFile {
   String appname;
   String appTitle;
   String localappDir;
+
+  String errorMsj;
   String serverappDir;
   String get appDirPath => "$localappDir/$appname";
   String get appPathURL => [hostPath, serverappDir, appname].join("/");
