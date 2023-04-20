@@ -32,7 +32,7 @@ class AppUpdater {
     if (!appFile.canupdate) {
       appFile = await _checkUpdate(
           dirName: dirName, localversion: appversion, isLiveApk: isLiveApk);
-
+      appFile.serverappDir = dirName;
       if (appFile.canupdate) {
         appFile.canupdate = await _fileExists(appFile: appFile);
       }
@@ -74,21 +74,26 @@ class AppUpdater {
 Future<bool> _fileExists({
   required AppFile appFile,
 }) async {
+  // print("_fileExists : ${appFile.appPathURL}");
   try {
     Dio dio = Dio();
+
     var response = await dio.get(
       appFile.appPathURL,
       options: Options(
         followRedirects: false,
-        // receiveTimeout: 1000,
+        receiveTimeout: 200,
         validateStatus: (status) => true,
       ),
     );
-
+    // print("_fileExists : ${response.statusCode}");
     return response.statusCode == 200;
-  } on DioError {
-    return false;
+  } on DioError catch (e) {
+    // e.type == DioErrorType.receiveTimeout;
+    // print("DioError : $e");
+    return e.type == DioErrorType.receiveTimeout;
   } catch (e) {
+    // print("_fileExists  :err: $e");
     return false;
   }
 }
