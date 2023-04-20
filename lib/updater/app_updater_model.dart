@@ -32,6 +32,10 @@ class AppUpdater {
     if (!appFile.canupdate) {
       appFile = await _checkUpdate(
           dirName: dirName, localversion: appversion, isLiveApk: isLiveApk);
+
+      if (appFile.canupdate) {
+        appFile.canupdate = await _fileExists(appFile: appFile);
+      }
     }
 
     if (!appFile.canupdate) {
@@ -64,6 +68,28 @@ class AppUpdater {
     if (ds.downStatus) {
       await ds.appDirPath.openFile;
     }
+  }
+}
+
+Future<bool> _fileExists({
+  required AppFile appFile,
+}) async {
+  try {
+    Dio dio = Dio();
+    var response = await dio.get(
+      appFile.appPathURL,
+      options: Options(
+        followRedirects: false,
+        // receiveTimeout: 1000,
+        validateStatus: (status) => true,
+      ),
+    );
+
+    return response.statusCode == 200;
+  } on DioError {
+    return false;
+  } catch (e) {
+    return false;
   }
 }
 
